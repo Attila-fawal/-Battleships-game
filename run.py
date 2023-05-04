@@ -1,119 +1,127 @@
 import random
-"""
-This function creates an empty grid of the given size with all elements set to a space character (' ').
-"""
-def create_grid(grid_size):
-    return [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
 
 
-"""
-This function displays the user's grid to the user by calling the print_board(board) function.
-"""
-def display_user_grid(grid, player_name):
-    print("{}'s Board:".format(player_name))
-    print_board(grid)
+class BaseBoard:
+    """Base class for the game board, containing common properties and methods."""
+
+    def __init__(self, grid_size, num_ships):
+        """Initializes the grid size, number of ships, grid, and places the ships on the grid."""
+        self.grid_size = grid_size
+        self.num_ships = num_ships
+        self.grid = self.create_grid()
+        self.place_ships()
+
+    def create_grid(self):
+        """Creates and returns an empty grid of the specified size."""
+        return [[' ' for _ in range(self.grid_size)] for _ in range(self.grid_size)]
+
+    def place_ships(self):
+        """Randomly places the specified number of ships on the grid."""
+        for _ in range(self.num_ships):
+            row = random.randint(0, self.grid_size - 1)
+            col = random.randint(0, self.grid_size - 1)
+            while self.grid[row][col] == 'S':
+                row = random.randint(0, self.grid_size - 1)
+                col = random.randint(0, self.grid_size - 1)
+            self.grid[row][col] = 'S'
+
+    def print_board(self):
+        """Prints the current state of the grid."""
+        print("   " + " ".join([str(i) for i in range(len(self.grid))]))
+        print("  " + "--" * len(self.grid))
+        row_number = 0
+        for row in self.grid:
+            print("%d |%s|" % (row_number, "|".join(row)))
+            row_number += 1
+        print("\n")
 
 
-"""
-This function displays the computer's grid to the user without showing the ships by calling the print_board(board) function. Ships are replaced by spaces before printing.
-"""
-def display_computer_grid(grid):
-    print("Computer's Board:")
-    hidden_grid = [[' ' if cell == 'S' else cell for cell in row] for row in grid]
-    print_board(hidden_grid)
+class PlayerBoard(BaseBoard):
+    """Class for the player's board, derived from the BaseBoard class."""
 
-"""
- This function generates a random row and column for the computer's move. It returns the row and column.
- """
+    def __init__(self, grid_size, num_ships, player_name):
+        """Initializes the player's name and calls the parent constructor."""
+        super().__init__(grid_size, num_ships)
+        self.player_name = player_name
+
+    def display(self):
+        """Displays the player's board."""
+        print("{}'s Board:".format(self.player_name))
+        self.print_board()
+
+
+class ComputerBoard(BaseBoard):
+    """Class for the computer's board, derived from the BaseBoard class."""
+
+    def display(self):
+        """Displays the computer's board with ships hidden."""
+        print("Computer's Board:")
+        hidden_grid = [[' ' if cell == 'S' else cell for cell in row] for row in self.grid]
+        self.print_hidden_board(hidden_grid)
+
+    def print_hidden_board(self, hidden_grid):
+        """Prints the current state of the hidden grid."""
+        print("   " + " ".join([str(i) for i in range(len(hidden_grid))]))
+        print("  " + "--" * len(hidden_grid))
+        row_number = 0
+        for row in hidden_grid:
+            print("%d |%s|" % (row_number, "|".join(row)))
+            row_number += 1
+        print("\n")
+
 def get_computer_input(grid_size):
+    """Generates random row and column coordinates within the grid size for the computer's move."""
     row = random.randint(0, grid_size - 1)
     col = random.randint(0, grid_size - 1)
     return row, col
 
-
-"""
-This function randomly places a specified number of ships ('S') on the given grid. It iterates through the number of ships and places them in random positions on the grid while making sure not to place a ship on top of another ship.
-"""
-def place_ships(grid, num_ships):
-    for _ in range(num_ships):
-        row = random.randint(0, len(grid) - 1)
-        col = random.randint(0, len(grid) - 1)
-        while grid[row][col] == 'S':
-            row = random.randint(0, len(grid) - 1)
-            col = random.randint(0, len(grid) - 1)
-        grid[row][col] = 'S'
-
-"""
- This function displays the grid to the user by calling the print_board(board) function.
-"""
-def display_grid(grid):
-    print_board(grid)
-"""
-This function prints the board with coordinates. It displays row and column numbers on the top and left sides of the grid, and displays the grid's content row by row.
-"""
-def print_board(board):
-    print("   " + " ".join([str(i) for i in range(len(board))]))
-    print("  " + "--" * len(board))
-    row_number = 0
-    for row in board:
-        print("%d |%s|" % (row_number, "|".join(row)))
-        row_number += 1
-    print("\n")
-"""
- This function prompts the user for row and column input and validates it to make sure it's a valid coordinate within the grid. It returns the row and column entered by the user.
-"""
 def get_user_input(grid_size):
+    """Prompts the user for row and column coordinates within the grid size."""
     while True:
         try:
             row = int(input("Enter number horizontally between (0-{}): ".format(grid_size - 1)))
             if 0 <= row < grid_size:
                 break
             else:
-                print("Invalid input, please enter coordinates within the grid.")
+                print("Invalid input, please enter coordinates within the grid.\n")
         except ValueError:
-            print("Invalid input, please enter a number.")
-    
+            print("Invalid input, please enter a number.\n")
+
     while True:
         try:
             col = int(input("Enter number vertically between (0-{}): ".format(grid_size - 1)))
             if 0 <= col < grid_size:
-                return row, col
+                break
             else:
-                print("Invalid input, please enter coordinates within the grid.")
+                print("Invalid input, please enter coordinates within the grid.\n")
         except ValueError:
-            print("Invalid input, please enter a number.")
-
-
-"""
-The main function starts and runs the Battleships game. It initializes the game by:
-
-1. Welcoming the player and explaining the symbols used in the game.
-2. Asking for the player's name.
-3. Prompting the player to choose the grid size between 3 and 15 (inclusive).
-4. Prompting the player to choose the number of ships between 1 and the selected grid size (inclusive).
-5. Creating the user's and computer's grids based on the chosen grid size.
-6. Placing the ships on the user's and computer's grids.
-7. Initializing the user and computer scores and ships remaining.
-
-Then, the function enters the game loop where it alternates between the user's and computer's turns. During each turn:
-
-1. Display the user's and computer's grids.
-2. Get the user's guess for the computer's grid and check if it's a hit or a miss. Update the scores and remaining ships accordingly.
-3. Get the computer's guess for the user's grid and check if it's a hit or a miss. Update the scores and remaining ships accordingly.
-
-The game loop continues until either the user or the computer sinks all of the opponent's ships. At the end of the game, the function displays the appropriate win or lose message for the user.
-"""
-
+            print("Invalid input, please enter a number.\n")
+            
+    return row, col
 
 def main():
-    print("Welcome To The Battleships Game!\n")
-    print("Symbols explanation:")
+    """
+The main function contains two primary loops:
+
+The game loop:
+This while loop continues running until either the user or the computer has no remaining ships. Inside this loop, the player and computer boards are displayed, and turns for the user and computer are handled.
+
+a. User's turn loop:
+This loop prompts the user to input their guess (row and column) for a ship on the computer's board. It keeps asking for input until the user provides a valid guess (a location that hasn't been guessed before). Afterward, the loop checks if the guess is a hit or a miss, updates the computer's board, and adjusts the scores and remaining ships accordingly.
+
+b. Computer's turn loop:
+This loop generates random guesses for the computer's turn. It keeps generating new guesses until a valid guess (a location that hasn't been guessed before) is found. The loop then checks if the guess is a hit or a miss on the user's board, updates the user's board, and adjusts the scores and remaining ships accordingly.
+
+After the game loop ends, the main function prints the game results, indicating whether the user or the computer has won the game.
+""" 
+    print("--------------------------------")
+    print("Welcome To The Battleships Game!")
+    print("--------------------------------\n")
+    print("Symbols explanation:\n")
     print(" S - Ship")
     print(" X - Hit")
-    print(" O - User Miss")
     print(" 0 - User Miss on Computer's Grid")
     print(" # - Computer Hit")
-    print(" C - Computer Miss")
     print("\n")
 
     player_name = input("Enter your name: ")
@@ -124,25 +132,22 @@ def main():
             if 3 <= grid_size <= 15:
                 break
             else:
-                print("Invalid input, please enter a grid size between 3 and 15 (inclusive).")
+                print("Invalid input, please enter a grid size between 3 and 15 (inclusive).\n")
         except ValueError:
-            print("Invalid input, please enter a number.")
+            print("Invalid input, please enter a number.\n")
 
     while True:
         try:
-            num_ships = int(input("Enter number of ships (1 TO {}): ".format(grid_size)))
+            num_ships = int(input("Enter number of ships (1 TO {}): \n".format(grid_size)))
             if 0 < num_ships <= grid_size:
                 break
             else:
-                print("Invalid input, please enter a number of ships between 1 and {} (inclusive).".format(grid_size))
+                print("Invalid input, please enter a number of ships between 1 and {} (inclusive).\n".format(grid_size))
         except ValueError:
-            print("Invalid input, please enter a number.")
+            print("Invalid input, please enter a number.\n")
 
-    user_grid = create_grid(grid_size)
-    computer_grid = create_grid(grid_size)
-
-    place_ships(user_grid, num_ships)
-    place_ships(computer_grid, num_ships)
+    player_board = PlayerBoard(grid_size, num_ships, player_name)
+    computer_board = ComputerBoard(grid_size, num_ships)
 
     user_score = 0
     computer_score = 0
@@ -151,45 +156,48 @@ def main():
     computer_ships_remaining = num_ships
 
     while user_ships_remaining > 0 and computer_ships_remaining > 0:
-        display_user_grid(user_grid, player_name)
-        display_computer_grid(computer_grid)
+        player_board.display()
+        computer_board.display()
 
         # User's turn
-        row, col = get_user_input(grid_size)
+        while True:
+            row, col = get_user_input(grid_size)
 
-        if computer_grid[row][col] == 'S':
-            print(" YOU GOT Hit!")
-            computer_grid[row][col] = 'X'
-            user_grid[row][col] = 'X'
+            if computer_board.grid[row][col] == ' ' or computer_board.grid[row][col] == 'S':
+                break
+            else:
+                print("You have already guessed this location. Please try again.\n")
+            
+        # Check hit or miss on computer's board
+        if computer_board.grid[row][col] == 'S':
+            print(" YOU GOT Hit!\n")
+            computer_board.grid[row][col] = 'X'
             computer_ships_remaining -= 1
             user_score += 1
-        elif user_grid[row][col] == ' ':
-            print("YOU Miss!")
-            user_grid[row][col] = 'O'
-            computer_grid[row][col] = '0'
-        else:
-            print("You have already guessed this location.")
+        elif computer_board.grid[row][col] == ' ':
+            print("YOU Miss!\n")
+            computer_board.grid[row][col] = '0'
 
         # Computer's turn
         row, col = get_computer_input(grid_size)
-        while user_grid[row][col] == 'O' or user_grid[row][col] == 'X' or user_grid[row][col] == '#' or user_grid[row][col] == 'C':
+        while player_board.grid[row][col] == 'O' or player_board.grid[row][col] == 'X' or player_board.grid[row][col] == '#':
             row, col = get_computer_input(grid_size)
 
-        if user_grid[row][col] == 'S':
-            print("Computer got a hit!")
-            user_grid[row][col] = '#'
+        if player_board.grid[row][col] == 'S':
+            print("Computer got a hit!\n")
+            player_board.grid[row][col] = '#'
             user_ships_remaining -= 1
             computer_score += 1
         else:
-            print("Computer missed!")
-            user_grid[row][col] = 'C'
+            print("Computer missed!\n")
 
-        print("User score: {}\nComputer score: {}".format(user_score, computer_score))
+        print("User score: {}\nComputer score: {}\n".format(user_score, computer_score))
 
     if user_ships_remaining == 0:
-        print("The computer has sunk all of your ships! Better luck next time!")
+        print("The computer has sunk all of your ships! Better luck next time!\n")
     else:
-        print("Congratulations, {}! You have sunk all the computer's ships!".format(player_name))
+        print("Congratulations, {}! You have sunk all the computer's ships!\n".format(player_name))
+
 
 if __name__ == "__main__":
     main()
