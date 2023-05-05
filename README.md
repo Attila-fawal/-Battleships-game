@@ -52,11 +52,16 @@ A classic Battleships game where the player competes against the computer to sin
 
 ![Screenshot (46)](https://user-images.githubusercontent.com/127791713/236439403-f43ad1e2-77c7-4483-a45d-dfcf655474a9.png)
 ![Screenshot (47)](https://user-images.githubusercontent.com/127791713/236440674-6343b06a-c1ae-4877-8be8-7fc361338ce0.png)
+
 ## Symbols
 - S: Ship
 - X: Hit
 - 0: User Miss on Computer's Grid
 - #: Computer Hit
+
+## Future features
+- Player can choose position of the ships
+- different size ships
 
 ## Data model 
 - the data model consists of classes and functions that represent game elements and their interactions. The primary classes used are BaseBoard, PlayerBoard, and ComputerBoard. The game also has utility functions to handle user input and computer input.
@@ -93,6 +98,8 @@ This project was deployed Using code Institute python-essentials-template.
 - create new heroku account or if you already have one press to create a new app.
 - Add name for your new app And choose the region Go to settings and add buildpacks `python` and `nodeJS` In that order.
 - add a _Config Var_ called `PORT`. Set this to `8000`.
+- Link the Heruku app to the repository
+- Click the Deploy
 
 ## Credits 
 - code Institute For the deployment terminal.
