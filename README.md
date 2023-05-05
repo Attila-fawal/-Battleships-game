@@ -98,7 +98,7 @@ This project was deployed Using code Institute python-essentials-template.
 - create new heroku account or if you already have one press to create a new app.
 - Add name for your new app And choose the region Go to settings and add buildpacks `python` and `nodeJS` In that order.
 - add a _Config Var_ called `PORT`. Set this to `8000`.
-- Link the Heruku app to the repository
+- Link the Heroku app to the repository
 - Click the Deploy
 
 ## Credits 
