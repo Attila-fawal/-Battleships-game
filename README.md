@@ -13,6 +13,7 @@ A classic Battleships game where the player competes against the computer to sin
 - The computer's turn consists of randomly generated guesses.
 - The game continues until either the user or the computer has no remaining ships.
 - The result is displayed, showing whether the user or computer has won the game.
+
 ![Screenshot (49)](https://user-images.githubusercontent.com/127791713/236438040-eb700b77-9387-47c1-86b6-b98286a78284.png)
 ![Screenshot (42)](https://user-images.githubusercontent.com/127791713/236437505-55027573-85e5-4eb1-80be-9c68a9b5e60e.png)
 
@@ -21,9 +22,11 @@ A classic Battleships game where the player competes against the computer to sin
 
 ### Examples of Error Handling
 - Grid size input: If the user enters a non-numeric input or a number outside the valid range (3-15), the game will display an error message and prompt the user to enter a valid grid size.
+
 ![Screenshot (52)](https://user-images.githubusercontent.com/127791713/236441430-689ea81d-6f04-462b-b3d4-5ec2a190496d.png)
 
 - Number of ships input: If the user enters a non-numeric input or a number outside the valid range (1 to the grid size), the game will display an error message and prompt the user to enter a valid number of ships.
+
 ![Screenshot (50)](https://user-images.githubusercontent.com/127791713/236440436-c376f680-7c3f-4fc4-9156-4ab960173ea7.png)
 
 
@@ -46,6 +49,7 @@ A classic Battleships game where the player competes against the computer to sin
 - Hit and miss feedback for both player and computer
 - Scoring and ship tracking
 - Win/lose game result
+
 ![Screenshot (46)](https://user-images.githubusercontent.com/127791713/236439403-f43ad1e2-77c7-4483-a45d-dfcf655474a9.png)
 ![Screenshot (47)](https://user-images.githubusercontent.com/127791713/236440674-6343b06a-c1ae-4877-8be8-7fc361338ce0.png)
 ## Symbols
