@@ -86,7 +86,7 @@ def get_user_input(grid_size):
     """Prompts the user for row and column coordinates within the grid size."""
     while True:
         try:
-            row = int(input("Enter number horizontally between (0-{}): "
+            row = int(input("Enter number horizontally between (0-{}):\n "
                             .format(grid_size - 1)))
             if 0 <= row < grid_size:
                 break
@@ -98,7 +98,7 @@ def get_user_input(grid_size):
 
     while True:
         try:
-            col = int(input("Enter number vertically between (0-{}): "
+            col = int(input("Enter number vertically between (0-{}):\n "
                             .format(grid_size - 1)))
             if 0 <= col < grid_size:
                 break
@@ -147,11 +147,11 @@ indicating whether the user or the computer has won the game."""
     print(" # - Computer Hit")
     print("\n")
 
-    player_name = input("Enter your name: ")
+    player_name = input("Enter your name: \n")
 
     while True:
         try:
-            grid_size = int(input("Enter grid size (3 TO 15): "))
+            grid_size = int(input("Enter grid size (3 TO 15): \n"))
             if 3 <= grid_size <= 15:
                 break
             else:
